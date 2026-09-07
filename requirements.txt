@@ -1,0 +1,5 @@
+# Everything except the web demo is stdlib-only: the learning core, the
+# pipeline, the CLI, the eval, and the judge (which talks HTTP via urllib).
+# These two are the web server, and nothing else needs them.
+fastapi>=0.110
+uvicorn>=0.29

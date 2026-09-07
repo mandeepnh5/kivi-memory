@@ -1,0 +1,12 @@
+# Seed persona: a Sarvam PM. Comments (#) are ignored by the loader.
+# Explicit dictionary entries - full trust immediately.
+{"type": "add_term", "payload": {"preferred": "Kivi", "kind": "product", "note": "Sarvam's dictation product (not the fruit kiwi)"}}
+{"type": "add_term", "payload": {"preferred": "Sarvam", "kind": "org", "note": "the user's company, Sarvam AI"}}
+# Aaditya learned through ordinary use: two corrections promote him to trusted.
+{"type": "observation", "payload": {"asr": "ask aditya to review the pull request", "formatted": "Ask Aditya to review the pull request.", "final": "Ask Aaditya to review the pull request."}}
+{"type": "observation", "payload": {"asr": "aditya will join the standup late", "formatted": "Aditya will join the standup late.", "final": "Aaditya will join the standup late."}}
+# Shreya corrected once - watching only, must not fire yet.
+{"type": "observation", "payload": {"asr": "send the report to shreya", "formatted": "Send the report to Shreya.", "final": "Send the report to Shreyaa."}}
+# The user force-disabled one entry (explicit control -> muted).
+{"type": "add_term", "payload": {"preferred": "Advaith", "kind": "person", "note": "former teammate"}}
+{"type": "set_trust", "payload": {"preferred": "Advaith", "trust": 0}}

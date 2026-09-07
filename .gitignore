@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.env
+kivi_memory.db
+*.db
+.pytest_cache/
+*.db-wal
+*.db-shm
+.venv/
+venv/

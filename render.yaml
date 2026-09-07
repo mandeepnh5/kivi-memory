@@ -1,0 +1,31 @@
+# Optional hosted deployment. The primary review method is still local Python
+# (RUN.md); this only exists so there can be a URL to click.
+#
+# The database is ephemeral here. The start command re-seeds on every boot, so
+# the demo always begins from the seed persona and anything taught to it is
+# lost when the instance restarts. That matches the design: reset is defined
+# as "wipe and replay the seed events", not as a special code path.
+
+services:
+  - type: web
+    name: kivi-memory
+    runtime: python
+    plan: free
+    healthCheckPath: /
+
+    buildCommand: pip install -r requirements.txt
+
+    # `serve` binds $PORT and $KIVI_HOST, both read in app/cli.py, so no code
+    # changes are needed to host this.
+    startCommand: python -m app.cli reset && python -m app.cli serve
+
+    envVars:
+      # loopback is the local default and is unreachable from outside a
+      # container, so the host has to say otherwise
+      - key: KIVI_HOST
+        value: 0.0.0.0
+
+      # sync: false means Render prompts for this and never reads it from the
+      # repo. Without it the app still runs; ambiguous words are left alone.
+      - key: GROQ_API_KEY
+        sync: false

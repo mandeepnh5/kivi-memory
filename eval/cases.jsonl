@@ -1,0 +1,171 @@
+# Eval dataset. Expected outputs encode the documented product policy in
+# DESIGN.md (precision-first, restraint on weak evidence) - they were not
+# copied from observed system outputs. Constructed cases were written from
+# the design; harvested cases were added from real Kivi dictation after the
+# build, including honest misses the system is required NOT to guess at.
+# Schema per case: id, category, seed ("persona" | [events]), steps[], and
+# optionally requires_llm (skip without a key) / mode ("no-llm" forces the
+# deterministic path). Step kinds: run (expect_output / expect_output_any /
+# expect_decisions {text: code-prefix} / expect_no_llm), observe
+# (expect_learned / expect_confirmed / expect_reverted / expect_ignored),
+# add, delete, assert_term (status), assert_absent.
+# Seed persona state: Kivi+Sarvam trusted (explicit), Aaditya trusted (learned
+# 2x), Shreyaa watching (learned 1x), Advaith muted (force-disabled).
+
+{"id": "corr-01", "category": "clear-correction", "seed": "persona", "steps": [{"do": "run", "formatted": "Ask Aditya to send the deck before lunch.", "expect_output": "Ask Aaditya to send the deck before lunch.", "expect_decisions": {"Aditya": "applied"}, "expect_no_llm": true}]}
+{"id": "corr-02", "category": "clear-correction", "requires_llm": true, "seed": "persona", "steps": [{"do": "run", "formatted": "Tell the team kivi is live.", "expect_output": "Tell the team Kivi is live.", "expect_decisions": {"kivi": "applied"}}]}
+{"id": "corr-02b", "category": "clear-correction", "mode": "no-llm", "seed": "persona", "steps": [{"do": "run", "formatted": "Tell the team kivi is live.", "expect_output": "Tell the team kivi is live.", "expect_decisions": {"kivi": "skipped:context-unavailable"}}]}
+{"id": "corr-03", "category": "edge-forms", "seed": "persona", "steps": [{"do": "run", "formatted": "Aditya's laptop is with IT.", "expect_output": "Aaditya's laptop is with IT.", "expect_decisions": {"Aditya": "applied"}}]}
+{"id": "corr-04", "category": "edge-forms", "seed": "persona", "steps": [{"do": "run", "formatted": "Aditya will demo today.", "expect_output": "Aaditya will demo today.", "expect_decisions": {"Aditya": "applied"}}]}
+{"id": "corr-05", "category": "edge-forms", "seed": "persona", "steps": [{"do": "run", "formatted": "Ask a ditya to join the call.", "expect_output": "Ask Aaditya to join the call.", "expect_decisions": {"a ditya": "applied"}}]}
+{"id": "corr-06", "category": "transliteration", "seed": "persona", "steps": [{"do": "run", "formatted": "Adithya pushed the fix.", "expect_output": "Aaditya pushed the fix.", "expect_decisions": {"Adithya": "applied"}}]}
+{"id": "corr-07", "category": "transliteration", "requires_llm": true, "seed": "persona", "steps": [{"do": "run", "formatted": "Ask Adtya to review it.", "expect_output": "Ask Aaditya to review it.", "expect_decisions": {"Adtya": "applied"}}]}
+{"id": "corr-07b", "category": "transliteration", "mode": "no-llm", "seed": "persona", "steps": [{"do": "run", "formatted": "Ask Adtya to review it.", "expect_output": "Ask Adtya to review it.", "expect_decisions": {"Adtya": "skipped:context-unavailable"}}]}
+{"id": "noop-09", "category": "fuzzy-collision", "seed": [{"type": "add_term", "payload": {"preferred": "Nikhil", "kind": "person", "note": "friend from the hostel"}}], "steps": [{"do": "run", "formatted": "The nickel battery died again.", "expect_output": "The nickel battery died again.", "expect_decisions": {"nickel": "skipped"}}]}
+{"id": "corr-08", "category": "multi-word", "seed": [{"type": "add_term", "payload": {"preferred": "Gajendra Circle", "kind": "place", "note": "landmark at IIT Madras"}}], "steps": [{"do": "run", "formatted": "Meet me at gajendra circle gate.", "expect_output": "Meet me at Gajendra Circle gate.", "expect_decisions": {"gajendra circle": "applied"}, "expect_no_llm": true}]}
+
+{"id": "noop-01", "category": "common-word-collision", "seed": "persona", "steps": [{"do": "run", "formatted": "I ate a kiwi for breakfast.", "expect_output": "I ate a kiwi for breakfast.", "expect_decisions": {"kiwi": "skipped"}}]}
+{"id": "noop-02", "category": "common-word-collision", "seed": "persona", "steps": [{"do": "run", "formatted": "The kiwi is a flightless bird from New Zealand.", "expect_output": "The kiwi is a flightless bird from New Zealand.", "expect_decisions": {"kiwi": "skipped"}}]}
+{"id": "noop-03", "category": "common-word-collision", "seed": "persona", "steps": [{"do": "run", "formatted": "I bought two kiwis at the market.", "expect_output": "I bought two kiwis at the market.", "expect_decisions": {"kiwis": "skipped"}}]}
+{"id": "noop-04", "category": "clean-text", "seed": "persona", "steps": [{"do": "run", "formatted": "The meeting is scheduled for four o'clock tomorrow.", "expect_output": "The meeting is scheduled for four o'clock tomorrow.", "expect_no_llm": true}]}
+{"id": "noop-05", "category": "below-threshold", "seed": "persona", "steps": [{"do": "run", "formatted": "Send it to Shreya today.", "expect_output": "Send it to Shreya today.", "expect_decisions": {"Shreya": "skipped:low-trust"}, "expect_no_llm": true}]}
+{"id": "noop-06", "category": "muted", "seed": "persona", "steps": [{"do": "run", "formatted": "Advait left the company last month.", "expect_output": "Advait left the company last month.", "expect_decisions": {"Advait": "skipped:low-trust"}, "expect_no_llm": true}]}
+{"id": "noop-07", "category": "homophone", "seed": "persona", "steps": [{"do": "run", "formatted": "There is a bug in the build.", "expect_output": "There is a bug in the build.", "expect_no_llm": true}]}
+{"id": "noop-08", "category": "idempotency", "seed": "persona", "steps": [{"do": "run", "formatted": "Ask Aaditya to review the Sarvam Kivi service.", "expect_output": "Ask Aaditya to review the Sarvam Kivi service.", "expect_no_llm": true}]}
+
+{"id": "traj-01", "category": "learning-trajectory", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "ask saurabh to check the logs", "formatted": "Ask Saurabh to check the logs.", "final": "Ask Sourabh to check the logs.", "expect_learned": ["Sourabh"]},
+  {"do": "run", "formatted": "Saurabh sent the file.", "expect_output": "Saurabh sent the file.", "expect_decisions": {"Saurabh": "skipped:low-trust"}},
+  {"do": "observe", "asr": "saurabh replied on mail", "formatted": "Saurabh replied on mail.", "final": "Sourabh replied on mail.", "expect_learned": ["Sourabh"]},
+  {"do": "run", "formatted": "Ping saurabh now.", "expect_output": "Ping Sourabh now.", "expect_decisions": {"saurabh": "applied"}}]}
+{"id": "traj-02", "category": "unlearning", "seed": [{"type": "add_term", "payload": {"preferred": "Zerodha", "kind": "org", "note": "client company"}}], "steps": [
+  {"do": "observe", "asr": "send the invoice to zeroda", "formatted": "Send the invoice to Zeroda.", "final": "Send the invoice to Zeroda.", "expect_reverted": ["Zerodha"]},
+  {"do": "run", "formatted": "Zeroda called back.", "expect_output": "Zeroda called back.", "expect_decisions": {"Zeroda": "skipped"}}]}
+{"id": "traj-03", "category": "unlearning", "seed": [{"type": "add_term", "payload": {"preferred": "Zerodha", "kind": "org", "note": "client company"}}, {"type": "set_trust", "payload": {"preferred": "Zerodha", "trust": 4}}], "steps": [
+  {"do": "observe", "asr": "send the invoice to zeroda", "formatted": "Send the invoice to Zeroda.", "final": "Send the invoice to Zeroda.", "expect_reverted": ["Zerodha"]},
+  {"do": "run", "formatted": "Zeroda called back.", "expect_output": "Zeroda called back.", "expect_decisions": {"Zeroda": "skipped:vetoed"}}]}
+{"id": "traj-04", "category": "homophone", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "send there report", "formatted": "Send there report.", "final": "Send their report.", "expect_ignored": [{"new": "their", "reason": "not-phonetic"}]},
+  {"do": "observe", "asr": "send thier report", "formatted": "Send thier report.", "final": "Send their report.", "expect_ignored": [{"new": "their", "reason": "common-word"}]},
+  {"do": "assert_absent", "preferred": "their"},
+  {"do": "run", "formatted": "There is the report.", "expect_output": "There is the report.", "expect_no_llm": true}]}
+{"id": "traj-05", "category": "hinglish", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "priya ko file bhejna", "formatted": "Priya ko file bhejna.", "final": "Priyaa ko file bhejna.", "expect_learned": ["Priyaa"]},
+  {"do": "assert_absent", "preferred": "bhejna"}]}
+
+{"id": "conf-01", "category": "conflict", "mode": "no-llm", "seed": [{"type": "add_term", "payload": {"preferred": "Aaditya", "kind": "person", "note": "colleague on the platform team"}}, {"type": "add_term", "payload": {"preferred": "Aditya", "kind": "person", "note": "the user's cousin"}}], "steps": [{"do": "run", "formatted": "Call adithya tonight.", "expect_output": "Call adithya tonight.", "expect_decisions": {"adithya": "skipped:conflict"}}]}
+
+{"id": "hing-01", "category": "hinglish", "requires_llm": true, "seed": "persona", "steps": [{"do": "run", "formatted": "Kal aditya ko bolna ki kivi wala demo ready hai.", "expect_output": "Kal Aaditya ko bolna ki Kivi wala demo ready hai.", "expect_decisions": {"aditya": "applied", "kivi": "applied"}}]}
+{"id": "hing-01b", "category": "hinglish", "mode": "no-llm", "seed": "persona", "steps": [{"do": "run", "formatted": "Kal aditya ko bolna ki kivi wala demo ready hai.", "expect_output": "Kal Aaditya ko bolna ki kivi wala demo ready hai.", "expect_decisions": {"aditya": "applied", "kivi": "skipped:context-unavailable"}}]}
+
+{"id": "llm-01", "category": "context-positive", "requires_llm": true, "seed": "persona", "steps": [{"do": "run", "formatted": "Did the kiwi deployment finish?", "expect_output": "Did the Kivi deployment finish?", "expect_decisions": {"kiwi": "applied"}}]}
+{"id": "llm-02", "category": "context-positive", "requires_llm": true, "seed": "persona", "steps": [{"do": "run", "formatted": "The Sarvam Kiwi service went down during the demo.", "expect_output": "The Sarvam Kivi service went down during the demo.", "expect_decisions": {"Kiwi": "applied"}}]}
+{"id": "llm-03", "category": "conflict", "requires_llm": true, "seed": [{"type": "add_term", "payload": {"preferred": "Aaditya", "kind": "person", "note": "colleague on the platform team"}}, {"type": "add_term", "payload": {"preferred": "Aditya", "kind": "person", "note": "the user's cousin"}}], "steps": [{"do": "run", "formatted": "Ask adithya to merge the platform branch.", "expect_output": "Ask Aaditya to merge the platform branch.", "expect_decisions": {"adithya": "applied"}}]}
+
+{"id": "nollm-01", "category": "degraded-mode", "mode": "no-llm", "seed": "persona", "steps": [{"do": "run", "formatted": "The Sarvam Kiwi service went down.", "expect_output": "The Sarvam Kiwi service went down.", "expect_decisions": {"Kiwi": "skipped:context-unavailable"}}]}
+
+# ---- Harvested cases: real dictation into the Kivi Windows app (see
+# harvested_raw.json for the raw ASR + formatted pairs). Includes honest
+# misses where the mangle is beyond phonetic reach and the correct behaviour
+# is restraint, not guessing.
+{"id": "harv-01", "category": "harvested", "seed": "persona", "steps": [{"do": "run", "formatted": "Remind me to return Aditya's charger before he leaves for the weekend.", "expect_output": "Remind me to return Aaditya's charger before he leaves for the weekend.", "expect_decisions": {"Aditya": "applied"}, "expect_no_llm": true}]}
+{"id": "harv-02", "category": "harvested", "seed": "persona", "steps": [{"do": "run", "formatted": "Aditya said he will pay me back after the mess bill.", "expect_output": "Aaditya said he will pay me back after the mess bill.", "expect_decisions": {"Aditya": "applied"}, "expect_no_llm": true}]}
+{"id": "harv-03", "category": "harvested", "seed": "persona", "steps": [{"do": "run", "formatted": "The Sarvam Kivi demo crashed right in front of everyone.", "expect_output": "The Sarvam Kivi demo crashed right in front of everyone.", "expect_no_llm": true}]}
+{"id": "harv-04", "category": "harvested", "seed": "persona", "steps": [{"do": "run", "formatted": "I added a kiwi and some cornflakes for breakfast today.", "expect_output": "I added a kiwi and some cornflakes for breakfast today.", "expect_decisions": {"kiwi": "skipped"}}]}
+{"id": "harv-05", "category": "harvested", "seed": "persona", "steps": [{"do": "run", "formatted": "The cruise got postponed to 4 o'clock tomorrow.", "expect_output": "The cruise got postponed to 4 o'clock tomorrow.", "expect_no_llm": true}]}
+{"id": "harv-06", "category": "harvested-miss", "seed": "persona", "steps": [{"do": "run", "formatted": "Itya from the second floor fixed the Wi-Fi router again.", "expect_output": "Itya from the second floor fixed the Wi-Fi router again.", "expect_no_llm": true}]}
+{"id": "harv-07", "category": "harvested-miss", "seed": "persona", "steps": [{"do": "run", "formatted": "Maine push the viva to next Friday, so we have time.", "expect_output": "Maine push the viva to next Friday, so we have time.", "expect_no_llm": true}]}
+{"id": "harv-08", "category": "harvested-miss", "seed": [{"type": "add_term", "payload": {"preferred": "Moodle", "kind": "product", "note": "IITM course portal"}}], "steps": [{"do": "run", "formatted": "Submit the assignment on Nodal before midnight or at 12.", "expect_output": "Submit the assignment on Nodal before midnight or at 12.", "expect_no_llm": true}]}
+{"id": "harv-09", "category": "harvested-miss", "seed": [{"type": "add_term", "payload": {"preferred": "KiviMark", "kind": "product", "note": "Kivi's markdown feature"}}], "steps": [{"do": "run", "formatted": "I have to finish the Kivi markup before the deadline.", "expect_output": "I have to finish the Kivi markup before the deadline."}]}
+{"id": "harv-10", "category": "harvested", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "Remind me to return Aditya's charger before he leaves for the weekend.", "formatted": "Remind me to return Aditya's charger before he leaves for the weekend.", "final": "Remind me to return Aaditya's charger before he leaves for the weekend.", "expect_confirmed": ["Aaditya"]}]}
+{"id": "harv-11", "category": "harvested", "seed": "persona", "steps": [{"do": "run", "formatted": "Kal Aaditya ko bolna ki Kivi wala demo ready hai.", "expect_output": "Kal Aaditya ko bolna ki Kivi wala demo ready hai.", "expect_no_llm": true}]}
+
+# ---- Cases added while hardening the join, guard and retire paths.
+{"id": "asif-01", "category": "join-guard", "seed": [{"type": "add_term", "payload": {"preferred": "Asif", "kind": "person", "note": "friend from the hostel"}}], "steps": [{"do": "run", "formatted": "As if that helps.", "expect_output": "As if that helps.", "expect_decisions": {"As if": "skipped"}}]}
+{"id": "traj-06", "category": "proper-noun-learning", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "ask joy to send the notes", "formatted": "Ask joy to send the notes.", "final": "Ask Joy to send the notes.", "expect_learned": ["Joy"]},
+  {"do": "assert_term", "preferred": "Joy", "status": "watching"},
+  {"do": "observe", "asr": "joy replied on mail", "formatted": "Did joy reply on mail?", "final": "Did Joy reply on mail?", "expect_learned": ["Joy"]},
+  {"do": "assert_term", "preferred": "Joy", "status": "trusted"}]}
+{"id": "traj-07", "category": "unlearning", "seed": [{"type": "add_term", "payload": {"preferred": "Priya", "kind": "person", "note": "classmate"}}], "steps": [
+  {"do": "observe", "asr": "tell priya about it", "formatted": "Tell priya about it.", "presented": "Tell Priya about it.", "final": "Tell priya about it.", "expect_reverted": ["Priya"]},
+  {"do": "run", "formatted": "priya called again.", "expect_output": "priya called again.", "expect_decisions": {"priya": "skipped"}}]}
+{"id": "traj-08", "category": "unlearning", "seed": [{"type": "add_term", "payload": {"preferred": "Gajendra Circle", "kind": "place", "note": "landmark at IIT Madras"}}], "steps": [
+  {"do": "observe", "asr": "meet at gajendra circle gate", "formatted": "Meet at gajendra circle gate.", "final": "Meet at gajendra circle gate.", "expect_reverted": ["Gajendra Circle"]},
+  {"do": "run", "formatted": "Meet at gajendra circle gate.", "expect_output": "Meet at gajendra circle gate.", "expect_decisions": {"gajendra circle": "skipped"}}]}
+{"id": "traj-09", "category": "unlearning", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "ask aditya and adithya to join", "formatted": "Ask aditya and adithya to join.", "presented": "Ask Aaditya and Aaditya to join.", "final": "Ask Aaditya and adithya to join.", "expect_confirmed": ["Aaditya"], "expect_reverted": ["Aaditya"]},
+  {"do": "run", "formatted": "aditya is here.", "expect_output": "aditya is here.", "expect_decisions": {"aditya": "skipped"}}]}
+
+{"id": "corr-09", "category": "edge-forms", "seed": [{"type": "add_term", "payload": {"preferred": "GPT4", "kind": "product", "note": "the model"}}], "steps": [
+  {"do": "run", "formatted": "Ask gpt4 to summarise the thread.", "expect_output": "Ask GPT4 to summarise the thread.", "expect_decisions": {"gpt4": "applied"}, "expect_no_llm": true},
+  {"do": "run", "formatted": "Ask GPT4 to summarise the thread.", "expect_output": "Ask GPT4 to summarise the thread.", "expect_no_llm": true}]}
+{"id": "noop-12", "category": "formatting", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "meeting notes for the team", "formatted": "meeting notes for the team", "final": "Meeting Notes For The Team", "expect_ignored": [{"new": "Notes", "reason": "case-only"}]},
+  {"do": "assert_absent", "preferred": "The"},
+  {"do": "assert_absent", "preferred": "Notes"}]}
+{"id": "traj-10", "category": "unlearning", "seed": [{"type": "add_term", "payload": {"preferred": "Aaditya", "kind": "person", "note": "colleague"}}], "steps": [
+  {"do": "observe", "asr": "ask a ditya to come", "formatted": "ask a ditya to come", "final": "ask a ditya to come", "expect_reverted": ["Aaditya"]},
+  {"do": "run", "formatted": "ask a ditya to come", "expect_output": "ask a ditya to come", "expect_decisions": {"a ditya": "skipped"}}]}
+
+# ---- Context guards and retired terms.
+{"id": "guard-01", "category": "context-guard", "mode": "no-llm", "seed": [{"type": "add_term", "payload": {"preferred": "Kivi", "kind": "product", "note": "Sarvam's dictation product"}}, {"type": "set_trust", "payload": {"preferred": "Kivi", "trust": 4}}], "steps": [
+  {"do": "observe", "asr": "i ate a kiwi for breakfast", "formatted": "I ate a kiwi for breakfast.", "presented": "I ate a Kivi for breakfast.", "final": "I ate a kiwi for breakfast.", "expect_reverted": ["Kivi"]},
+  {"do": "run", "formatted": "She ate a kiwi after breakfast today.", "expect_output": "She ate a kiwi after breakfast today.", "expect_decisions": {"kiwi": "skipped:guarded"}, "expect_no_llm": true},
+  {"do": "run", "formatted": "The kiwi dashboard is loading slowly.", "expect_output": "The kiwi dashboard is loading slowly.", "expect_decisions": {"kiwi": "skipped:context-unavailable"}}]}
+# guard-02 exercises the judged half of the same guard: the food sentence is
+# held back, so a product sentence must still reach the judge. Whether the
+# judge then applies is model-dependent - the free endpoint declines this
+# span in roughly one judged run in seven, under the load of a full eval -
+# so either outcome counts, exactly as in hard-05. The mechanism itself is
+# pinned deterministically by guard-01 above, which needs no key: there the
+# product sentence reaches `context-unavailable`, not `guarded`, which is
+# the whole claim ("restraint is as wide as the mistake, no wider").
+{"id": "guard-02", "category": "context-guard", "seed": [{"type": "add_term", "payload": {"preferred": "Kivi", "kind": "product", "note": "Sarvam's dictation product"}}, {"type": "set_trust", "payload": {"preferred": "Kivi", "trust": 4}}], "requires_llm": true, "steps": [
+  {"do": "observe", "asr": "i ate a kiwi for breakfast", "formatted": "I ate a kiwi for breakfast.", "presented": "I ate a Kivi for breakfast.", "final": "I ate a kiwi for breakfast.", "expect_reverted": ["Kivi"]},
+  {"do": "run", "formatted": "Is the kiwi rollout finished yet?", "expect_output_any": ["Is the Kivi rollout finished yet?", "Is the kiwi rollout finished yet?"]}]}
+{"id": "ret-01", "category": "retired", "seed": "persona", "steps": [
+  {"do": "observe", "asr": "ask dhruv to come", "formatted": "Ask Dhruv to come.", "final": "Ask Dhruvv to come.", "expect_learned": ["Dhruvv"]},
+  {"do": "delete", "preferred": "Dhruvv"},
+  {"do": "observe", "asr": "dhruv is waiting", "formatted": "Dhruv is waiting.", "final": "Dhruvv is waiting.", "expect_ignored": [{"new": "Dhruvv", "reason": "retired"}]},
+  {"do": "assert_absent", "preferred": "Dhruvv"},
+  {"do": "add", "preferred": "Dhruvv", "kind": "person"},
+  {"do": "assert_term", "preferred": "Dhruvv", "status": "trusted"}]}
+{"id": "noop-10", "category": "common-word-collision", "requires_llm": true, "seed": [{"type": "add_term", "payload": {"preferred": "Berry", "kind": "person", "note": "classmate from the hostel"}}], "steps": [{"do": "run", "formatted": "I picked a ripe berry from the bush.", "expect_output": "I picked a ripe berry from the bush.", "expect_decisions": {"berry": "skipped"}}]}
+
+# ---- Hard-edge cases added while hardening the judge: conflict and exact
+# spelling in the same sentence, homophone names, long transliterations,
+# split product names. hard-02 and hard-03 pin the divergent-spelling signal
+# (the preferred already present elsewhere in the sentence).
+{"id": "noop-13", "category": "unlisted-word", "seed": [{"type": "add_term", "payload": {"preferred": "Dev", "kind": "person", "note": "my flatmate"}}, {"type": "add_term", "payload": {"preferred": "Sunny", "kind": "person", "note": "classmate"}}], "steps": [
+  {"do": "run", "formatted": "The morning dew was heavy on the grass.", "expect_output": "The morning dew was heavy on the grass.", "expect_decisions": {"dew": "skipped"}},
+  {"do": "run", "formatted": "It is sunny outside, bring a hat.", "expect_output": "It is sunny outside, bring a hat.", "expect_decisions": {"sunny": "skipped"}}]}
+{"id": "noop-14", "category": "identifier", "seed": "persona", "steps": [
+  {"do": "run", "formatted": "Mail aditya.kumar@sarvam.ai when you can.", "expect_output": "Mail aditya.kumar@sarvam.ai when you can.", "expect_no_llm": true},
+  {"do": "run", "formatted": "Run C:/users/aditya/kivi/app.py now.", "expect_output": "Run C:/users/aditya/kivi/app.py now.", "expect_no_llm": true}]}
+# A stranger who shares a first name with a known term. The bare spelling is
+# thoroughly proven here (the persona has corrected "aditya" twice), so this
+# pins that evidence about a word on its own never licenses rewriting someone
+# else's name. Deterministic path: no judge is available to catch it.
+{"id": "noop-15", "category": "shared-first-name", "seed": "persona", "steps": [
+  {"do": "run", "formatted": "I met Aditya Sharma from the Delhi office yesterday.", "expect_output": "I met Aditya Sharma from the Delhi office yesterday.", "expect_decisions": {"Aditya": "skipped"}},
+  {"do": "run", "formatted": "Aditya Birla Group announced its results.", "expect_output": "Aditya Birla Group announced its results."},
+  {"do": "run", "formatted": "We watched Aditya 369 last night.", "expect_output": "We watched Aditya 369 last night."},
+  {"do": "run", "formatted": "ADITYA BIRLA GROUP ANNOUNCED ITS RESULTS.", "expect_output": "ADITYA BIRLA GROUP ANNOUNCED ITS RESULTS."}]}
+{"id": "hard-01", "category": "conflict", "mode": "no-llm", "seed": [{"type": "add_term", "payload": {"preferred": "Aditya", "kind": "person", "note": "the user's cousin"}}, {"type": "add_term", "payload": {"preferred": "Aaditya", "kind": "person", "note": "colleague on the platform team"}}], "steps": [
+  {"do": "run", "formatted": "I told adithya about it, not Aditya, he was not even there.", "expect_output": "I told adithya about it, not Aditya, he was not even there.", "expect_decisions": {"adithya": "skipped:conflict"}}]}
+{"id": "hard-02", "category": "trap-and-term", "seed": "persona", "steps": [
+  {"do": "run", "formatted": "The Kivi demo crashed while I was eating a kiwi.", "expect_output": "The Kivi demo crashed while I was eating a kiwi.", "expect_decisions": {"kiwi": "skipped"}}]}
+{"id": "hard-03", "category": "homophone", "seed": [{"type": "add_term", "payload": {"preferred": "Kash", "kind": "person", "note": "friend from the hostel"}}], "steps": [
+  {"do": "run", "formatted": "Kash still has not returned the cash from the movie tickets.", "expect_output": "Kash still has not returned the cash from the movie tickets.", "expect_decisions": {"cash": "skipped"}}]}
+{"id": "hard-04", "category": "transliteration", "seed": [{"type": "add_term", "payload": {"preferred": "Lakshminarayanan", "kind": "person", "note": "thermodynamics professor"}}], "steps": [
+  {"do": "run", "formatted": "Laxminarayanan sir is taking the extra class on Thursday.", "expect_output": "Lakshminarayanan sir is taking the extra class on Thursday.", "expect_decisions": {"Laxminarayanan": "applied"}, "expect_no_llm": true}]}
+# hard-05 is the one span whose outcome rests entirely on the judge: both
+# halves of "kiwi mark" are ordinary words, so the deterministic path cannot
+# resolve it (hard-05b pins that it stays put without a key). The free-tier
+# model gets it right in most runs but not all, so either outcome counts as
+# correct here - a missed correction, never a wrong one.
+{"id": "hard-05", "category": "split-merge", "requires_llm": true, "seed": [{"type": "add_term", "payload": {"preferred": "KiviMark", "kind": "product", "note": "Kivi's markdown feature"}}], "steps": [{"do": "run", "formatted": "Push the changes to the kiwi mark staging branch tonight.", "expect_output_any": ["Push the changes to the KiviMark staging branch tonight.", "Push the changes to the kiwi mark staging branch tonight."]}]}
+{"id": "hard-05b", "category": "split-merge", "mode": "no-llm", "seed": [{"type": "add_term", "payload": {"preferred": "KiviMark", "kind": "product", "note": "Kivi's markdown feature"}}], "steps": [
+  {"do": "run", "formatted": "Push the changes to the kiwi mark staging branch tonight.", "expect_output": "Push the changes to the kiwi mark staging branch tonight.", "expect_decisions": {"kiwi mark": "skipped:context-unavailable"}}]}

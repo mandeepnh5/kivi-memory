@@ -1,0 +1,105 @@
+{
+  "_about": "25 takes dictated into the Kivi Windows app, one per hotkey press. 'asr' is the speech model's text and 'formatted' is the formatter's, the same two inputs this system receives at runtime. Nothing is cherry-picked: the mangles the system cannot recover from are kept too, and DATA.md section 2 lists which ones became eval cases. The four Hindi takes came back from the speech model in Hindi script; they are written here in Roman script, as the formatter emits them and as this system reads them.",
+  "takes": [
+    {
+      "asr": "Remind me to return Aditya's charger before he leaves for the weekend.",
+      "formatted": "Remind me to return Aditya's charger before he leaves for the weekend."
+    },
+    {
+      "asr": "Shreya and Dhruv said they will come to the mess around 8.",
+      "formatted": "Shreya and Dhruv said they will come to the mess around 8."
+    },
+    {
+      "asr": "Me na push the viva to next Friday. So we have time.",
+      "formatted": "Maine push the viva to next Friday, so we have time."
+    },
+    {
+      "asr": "Ask Srinivasan sir if Saurabh can also join the project review.",
+      "formatted": "Ask Srinivasan sir if Saurabh can also join the project review."
+    },
+    {
+      "asr": "Itya from second floor fixed the Wi-Fi router again.",
+      "formatted": "Itya from the second floor fixed the Wi-Fi router again."
+    },
+    {
+      "asr": "Tell Nikhil that Pranav already booked the badminton court.",
+      "formatted": "Tell Nikhil that Pranav already booked the badminton court."
+    },
+    {
+      "asr": "Meeting Aishwarya near Gajendra Circle at 5. Don't be late.",
+      "formatted": "Meeting Aishwarya near Gajendra Circle at 5. Don't be late."
+    },
+    {
+      "asr": "The Sarvam Kiwi demo crashed right in front of everyone.",
+      "formatted": "The Sarvam Kivi demo crashed right in front of everyone."
+    },
+    {
+      "asr": "I have to finish the Kiwi mark right up before the deadline.",
+      "formatted": "I have to finish the Kivi markup before the deadline."
+    },
+    {
+      "asr": "My Zerodha account got locked again third time this month.",
+      "formatted": "My Zerodha account got locked again for the third time this month."
+    },
+    {
+      "asr": "Upload the poster to the Insti Drive and share it in the group.",
+      "formatted": "Upload the poster to the Insti Drive and share it in the group."
+    },
+    {
+      "asr": "I add a kiwi and some cornflakes for the breakfast today.",
+      "formatted": "I added a kiwi and some cornflakes for breakfast today."
+    },
+    {
+      "asr": "Apparently the kiwi bird cannot fly at all.",
+      "formatted": "Apparently the kiwi bird cannot fly at all."
+    },
+    {
+      "asr": "There has to be an easier way to submit this form.",
+      "formatted": "There has to be an easier way to submit this form."
+    },
+    {
+      "asr": "The endsum for thermodynamics is on the 23rd.",
+      "formatted": "The endsum for thermodynamics is on the 23rd."
+    },
+    {
+      "asr": "Submit the assignment on nodal before midnight or at locks.",
+      "formatted": "Submit the assignment on Nodal before midnight or at 12."
+    },
+    {
+      "asr": "The professor said attendance is mandatory for the lab session.",
+      "formatted": "The professor said, \"Attendance is mandatory for the lab session.\""
+    },
+    {
+      "asr": "kal aaditya ko bolna ki Kiwi wala demo ready hai",
+      "formatted": "Kal Aaditya ko bolna ki Kivi wala demo ready hai."
+    },
+    {
+      "asr": "shreya se poochna ki notes bheje ya nahi",
+      "formatted": "Ask Shreya if she sent the notes or not."
+    },
+    {
+      "asr": "yaar this week is too hectic matlab 1 din bhi free nahi hai",
+      "formatted": "Yaar, this week is too hectic; matlab, ek din bhi free nahi hai."
+    },
+    {
+      "asr": "The cruise got postponed to 4 o'clock tomorrow.",
+      "formatted": "The cruise got postponed to 4 o'clock tomorrow."
+    },
+    {
+      "asr": "Can you check the document once and tell me if anything is missing?",
+      "formatted": "Can you check the document and tell me if anything is missing?"
+    },
+    {
+      "asr": "Let me know when you reach. I will come down to the gate.",
+      "formatted": "Let me know when you arrive. I will come down to the gate."
+    },
+    {
+      "asr": "Say a line with Aditya again, worded differently. Aditya said he will pay me back after the mess bill.",
+      "formatted": "Say a line with Aditya again, worded differently. Aditya said he will pay me back after the mess bill."
+    },
+    {
+      "asr": "Say a line with kiwi again worded differently. Is a sarvam kiwi thing working now or not?",
+      "formatted": "Say a line with Kivi again, worded differently. Is the Sarvam Kivi thing working now or not?"
+    }
+  ]
+}
